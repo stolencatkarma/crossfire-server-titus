@@ -6,6 +6,9 @@
 *.ko
 *.obj
 *.elf
+*.Po
+/autom4te.cache/*
+/doc/*
 
 # Linker output
 *.ilk
