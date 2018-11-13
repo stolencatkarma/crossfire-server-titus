@@ -188,7 +188,7 @@ void attempt_do_smithery(object *caster, object *cauldron) {
 
     // take casters skill level into account.
     int j = find_skill_by_number(caster, SK_SMITHERY)->level;
-    int k = MAX(100, (j / 100) * 100); // max 100% chance - bonus
+    int k = MIN(100, (j / 100) * 100); // max 100% chance - bonus
     // run the success and bonus formula
     success_chance = k - (atmpt_bonus * 2);
     if(rndm(0, 100) <= success_chance) {
@@ -207,7 +207,7 @@ void attempt_do_smithery(object *caster, object *cauldron) {
 
     // if we make ANY object reduce the stack sizes by an appropriate amount.
     if(success) {
-        object_decrease_nrof(potion, MIN(1, stat_improve[abs(atmpt_bonus)] / 5)); // decreaase the stack size taking into account 1/5th requirements
+        object_decrease_nrof(potion, MAX(1, stat_improve[abs(atmpt_bonus)] / 5)); // decreaase the stack size taking into account 1/5th requirements
         object_decrease_nrof(inorganic, stat_improve[abs(atmpt_bonus)]); // decreaase the stack size.
         object_decrease_nrof(flesh, stat_improve[abs(atmpt_bonus)]); // decreaase the stack size.
         SET_FLAG(cauldron, FLAG_APPLIED); // not sure we need this but i don't think it hurts.
