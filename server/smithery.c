@@ -184,13 +184,39 @@ static void attempt_do_smithery(object *caster, object *cauldron) {
             break; // once we hit our max atmpt_bonus we can break out.
         }
     }
-    // do a string search to see what type of stat is being improved.
-    if(strcmp("potionstr", potion->name)) {
-                
-    }
 
     // take casters skill level into account.
+    int j = find_skill_by_number(caster, SK_SMITHERY)->level;
+    int k = MAX((j / 100) * 100, 100); //max 100% chance - bonus
     // run the success and bonus formula
+    success_chance = k - (atmpt_bonus * 2);
+    if(rndm(0, 100) <= success_chance) {
+        // do nothing
+    } 
+    else {
+        atmpt_bonus = atmpt_bonus * -1; // flip to a negative bonus, caster recieves items either way.
+    }
+    
+    // do a string search to see what type of stat is being improved.
+    int success = FALSE;
+    if(strcmp("potionstr", potion->name)) {
+        base_item->stats.Str = atmpt_bonus;
+        success = TRUE; 
+    }
+
+    // if we make ANY object reduce the stack sizes by an appropriate amount.
+    if(success) {
+        object_decrease_nrof(potion, *stat_improve[abs(atmpt_bonus)] / 5); // decreaase the stack size taking into account 1/5th requirements
+        object_decrease_nrof(inorganic, *stat_improve[abs(atmpt_bonus)]); // decreaase the stack size.
+        object_decrease_nrof(flesh, *stat_improve[abs(atmpt_bonus)]); // decreaase the stack size.
+    }
+    else {
+        // didn't create an item, return as is.
+    }
+    
+    SET_FLAG(cauldron, FLAG_APPLIED); // not sure we need this but i don't think it hurts.
+
     // either return an item of +bonus on success on -bonus on failure.
+    return success;
 
 }
