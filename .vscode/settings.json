@@ -2,7 +2,8 @@
     "files.associations": {
         "global.h": "c",
         "includes.h": "c",
-        "skills.h": "c"
+        "skills.h": "c",
+        "define.h": "c"
     },
     "editor.fontSize": 16,
     "editor.fontFamily": "Consolas, 'Courier New', monospace"
