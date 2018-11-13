@@ -169,7 +169,8 @@ void attempt_do_smithery(object *caster, object *cauldron) {
         return NULL;
     }
     // level zero is 0, start at +1 bonus
-    for(size_t i = 1; i < 31; i++) {
+    size_t i = 1;
+    for(i; i < 31; i++) {
         if(potion->nrof >= stat_improve[i] / 5) { // use our list of needed mats to improve stats
             atmpt_bonus = i; // potions use 1/5th the requirements.
         } 
