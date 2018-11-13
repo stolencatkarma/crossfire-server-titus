@@ -117,7 +117,7 @@ int use_smithery(object *op) {
 takes a list of items in the cauldron and changes it to a single
 item either good or bad
 */ 
-static void *attempt_do_smithery(object *caster, object *cauldron) {
+void attempt_do_smithery(object *caster, object *cauldron) {
     int stat_improve[] = {0, 3, 12, 27, 48, 75, 108, 147, 192, 243, 300, 363, 432, 507, 588, 675, 768, 867, 972, 1083, 1200, 1323, 1452, 1587, 1728, 1875, 2028, 2187, 2352, 2523, 2700};
     float success_chance;
     int atmpt_bonus = 0; // how much of a bonus we are attempting.
