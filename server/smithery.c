@@ -117,8 +117,8 @@ int use_smithery(object *op) {
 takes a list of items in the cauldron and changes it to a single
 item either good or bad
 */ 
-static void attempt_do_smithery(object *caster, object *cauldron) {
-    int *stat_improve[] = {0, 3, 12, 27, 48, 75, 108, 147, 192, 243, 300, 363, 432, 507, 588, 675, 768, 867, 972, 1083, 1200, 1323, 1452, 1587, 1728, 1875, 2028, 2187, 2352, 2523, 2700};
+static void *attempt_do_smithery(object *caster, object *cauldron) {
+    int stat_improve[] = {0, 3, 12, 27, 48, 75, 108, 147, 192, 243, 300, 363, 432, 507, 588, 675, 768, 867, 972, 1083, 1200, 1323, 1452, 1587, 1728, 1875, 2028, 2187, 2352, 2523, 2700};
     float success_chance;
     int atmpt_bonus = 0; // how much of a bonus we are attempting.
     object *item; // our output item.
@@ -170,14 +170,14 @@ static void attempt_do_smithery(object *caster, object *cauldron) {
     }
     // level zero is 0, start at +1 bonus
     for(size_t i = 1; i < 31; i++) {
-        if(potion->nrof >= *stat_improve[i] / 5) { // use our list of needed mats to improve stats
+        if(potion->nrof >= stat_improve[i] / 5) { // use our list of needed mats to improve stats
             atmpt_bonus = i; // potions use 1/5th the requirements.
         } 
         // use our list of needed mats to improve stats but dont go over the current atmpt_bonus
-        if(inorganic->nrof >= *stat_improve[i] && i < atmpt_bonus) { 
+        if(inorganic->nrof >= stat_improve[i] && i < atmpt_bonus) { 
             atmpt_bonus = i; 
         }
-        if(flesh->nrof >= *stat_improve[i] && i < atmpt_bonus) { 
+        if(flesh->nrof >= stat_improve[i] && i < atmpt_bonus) { 
             atmpt_bonus = i; 
         }
         if(i > atmpt_bonus){
@@ -206,17 +206,14 @@ static void attempt_do_smithery(object *caster, object *cauldron) {
 
     // if we make ANY object reduce the stack sizes by an appropriate amount.
     if(success) {
-        object_decrease_nrof(potion, *stat_improve[abs(atmpt_bonus)] / 5); // decreaase the stack size taking into account 1/5th requirements
-        object_decrease_nrof(inorganic, *stat_improve[abs(atmpt_bonus)]); // decreaase the stack size.
-        object_decrease_nrof(flesh, *stat_improve[abs(atmpt_bonus)]); // decreaase the stack size.
+        object_decrease_nrof(potion, stat_improve[abs(atmpt_bonus)] / 5); // decreaase the stack size taking into account 1/5th requirements
+        object_decrease_nrof(inorganic, stat_improve[abs(atmpt_bonus)]); // decreaase the stack size.
+        object_decrease_nrof(flesh, stat_improve[abs(atmpt_bonus)]); // decreaase the stack size.
     }
     else {
         // didn't create an item, return as is.
     }
     
     SET_FLAG(cauldron, FLAG_APPLIED); // not sure we need this but i don't think it hurts.
-
-    // either return an item of +bonus on success on -bonus on failure.
-    return success;
-
+    return;   
 }
