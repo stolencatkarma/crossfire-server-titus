@@ -32,7 +32,11 @@
 /* socklen_t is defined in this file on some systems, and that type is
  * used in newserver.h, which is used in all other files
  */
-#include <sys/socket.h>
+#ifdef __WIN32__ /* ---win32 exclude this, config comes from VC ide */
+#   include <winsock2.h>
+#else
+#   include <sys/socket.h>
+#endif
 #endif
 
 #include <stdio.h>

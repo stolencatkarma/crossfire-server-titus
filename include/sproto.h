@@ -22,6 +22,8 @@ Account_Char *account_char_remove(Account_Char *chars, const char *pl_name);
 void account_char_free(Account_Char *chars);
 /* alchemy.c */
 int use_alchemy(object *op);
+/* smithery.c */
+int use_smithery(object *op);
 /* apply.c */
 int transport_can_hold(const object *transport, const object *op, int nrof);
 int should_director_abort(const object *op, const object *victim);
