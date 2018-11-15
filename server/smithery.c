@@ -121,6 +121,7 @@ item either good or bad
 void attempt_do_smithery(object *caster, object *cauldron) {
     int stat_improve[] = {0, 3, 12, 27, 48, 75, 108, 147, 192, 243, 300, 363, 432, 507, 588, 675, 768, 867, 972, 1083, 1200, 1323, 1452, 1587, 1728, 1875, 2028, 2187, 2352, 2523, 2700};
     int success_chance;
+    int success = FALSE;
     int atmpt_bonus = 0; // how much of a bonus we are attempting.
     object *base_item; // base item for crafting.
     object *potion; // the potion item we are using to craft
@@ -144,7 +145,7 @@ void attempt_do_smithery(object *caster, object *cauldron) {
             if (base_item == NULL) { /* failure--no type found */
             draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_ERROR,
                         "You need to put in a base item to use smithery on this forge.");
-            return NULL;
+            return;
         }
     }
     // now that we have our base_item set we need to pick a stat to improve depending on the
@@ -154,21 +155,21 @@ void attempt_do_smithery(object *caster, object *cauldron) {
     if (potion == NULL) { /* failure--no type found */
         draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_ERROR,
                         "You need to put in the proper potion item to use smithery on this forge.");
-        return NULL;
+        return;
     }
     
     inorganic = object_find_by_type(cauldron, INORGANIC);
     if (inorganic == NULL) { /* failure--no type found */
         draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_ERROR,
                         "You need to put in the proper inorganic item to use smithery on this forge.");
-        return NULL;
+        return;
     }
     
     flesh = object_find_by_type(cauldron, FLESH);
     if (flesh == NULL) { /* failure--no type found */
         draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_ERROR,
                         "You need to put in the proper flesh item to use smithery on this forge.");
-        return NULL;
+        return;
     }
     // level zero is 0, start at +1 bonus
     size_t i = 1;
@@ -201,7 +202,7 @@ void attempt_do_smithery(object *caster, object *cauldron) {
     }
     
     // do a string search to see what type of stat is being improved.
-    int success = FALSE;
+
     if(strcmp("potionstr", potion->name) && strcmp("demon_head", flesh->name) && strcmp("cinnabar", inorganic->name)) {
         base_item->stats.Str = atmpt_bonus;
         success = TRUE; 
