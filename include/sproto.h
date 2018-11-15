@@ -26,6 +26,8 @@ int use_alchemy(object *op);
 int use_smithery(object *op);
 /* bowery.c */
 int use_bowery(object *op);
+/* jewler.c */
+int use_bowery(object *op);
 /* apply.c */
 int transport_can_hold(const object *transport, const object *op, int nrof);
 int should_director_abort(const object *op, const object *victim);

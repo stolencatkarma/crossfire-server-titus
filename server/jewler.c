@@ -1,4 +1,4 @@
-// bowery takes a object in a couldron 
+// jewler takes a object in a couldron 
 // along with materials and gives the object a bonus
 // stats +1 to +30 OR
 // resist +1 to +115
@@ -12,14 +12,6 @@ Archs will be drawn from archs/inorganic/, archs/potions/ & archs/flesh.
 -stat modifiers should always use permanent stat potions- 
 
 Stat potion requirement should be only 1/5th of the required number of other ingredients)
-
-STR: potionstr, demon_head, cinnabar
-DEX: potiondes, demon_head, sulpher
-POW: potionpow, demon_head, pyrite
-INT: potionint, demon_head, phosphorus
-WIS: potionwis, demon_head, salt
-CHA: potioncha, demon_head, gypsum
-CON: potioncon, demon_head, graphite
 
 Special_ac:       bat_wing, phil_salt, vial_yellow
 Special_wc:       hand, phil_salt, vial_yellow 
@@ -82,14 +74,14 @@ CON: potioncon, demon_head, emerald
 #include <spells.h>
 #include <assert.h>
 
-int use_bowery(object *op) {
+int use_jewler(object *op) {
     object *unpaid_cauldron = NULL;
     object *unpaid_item = NULL;
-    int did_bowery = 0;
+    int did_jewler = 0;
     char name[MAX_BUF];
 
     if (QUERY_FLAG(op, FLAG_WIZ))
-        draw_ext_info(NDI_UNIQUE, 0, op, MSG_TYPE_COMMAND, MSG_TYPE_COMMAND_DM, "Note: bowery in wizard-mode.\n");
+        draw_ext_info(NDI_UNIQUE, 0, op, MSG_TYPE_COMMAND, MSG_TYPE_COMMAND_DM, "Note: jewler in wizard-mode.\n");
 
     FOR_MAP_PREPARE(op->map, op->x, op->y, tmp) {
         if (QUERY_FLAG(tmp, FLAG_IS_CAULDRON)) {
@@ -102,10 +94,10 @@ int use_bowery(object *op) {
                 continue;
 
             // takes the caster and cauldron and after returns updates the contents of the cauldron
-            attempt_do_bowery(op, tmp);  
+            attempt_do_jewler(op, tmp);  
             if (QUERY_FLAG(tmp, FLAG_APPLIED))
                 esrv_send_inventory(op, tmp); //ser
-            did_bowery = 1;
+            did_jewler = 1;
         }
     } FOR_MAP_FINISH();
     if (unpaid_cauldron) {
@@ -120,14 +112,14 @@ int use_bowery(object *op) {
                              name);
     }
 
-    return did_bowery; // returns 1 on success for generating xp
+    return did_jewler; // returns 1 on success for generating xp
 }
 
 /* 
 takes a list of items in the cauldron and changes it to a single
 item either good or bad
 */ 
-void attempt_do_bowery(object *caster, object *cauldron) {
+void attempt_do_jewler(object *caster, object *cauldron) {
     int stat_improve[] = {0, 3, 12, 27, 48, 75, 108, 147, 192, 243, 300, 363, 432, 507, 588, 675, 768, 867, 972, 1083, 1200, 1323, 1452, 1587, 1728, 1875, 2028, 2187, 2352, 2523, 2700};
     int success_chance;
     int success = FALSE;
@@ -142,37 +134,35 @@ void attempt_do_bowery(object *caster, object *cauldron) {
 
 
     // set the base_item as either the first weapon we find or the first armor we find.
-    base_item = object_find_by_type(cauldron, WEAPON);
+    base_item = object_find_by_type(cauldron, AMULET);
     if (base_item == NULL) { /* failure--no type found */
-        base_item = object_find_by_type(cauldron, ARMOUR);
+        base_item = object_find_by_type(cauldron, RING);
         if (base_item == NULL) { /* failure--no type found */
-            base_item = object_find_by_type(cauldron, SHIELD);
-            if (base_item == NULL) { /* failure--no type found */
-                draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_ERROR,
-                            "You need to put in a base item to use bowery on this bench.");
-                return;
-            }
+            draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_ERROR,
+                        "You need to put in a base item to use jewler on this bench.");
+            return;
         }
     }
+
 
     // now that we have our base_item set we need to pick a stat to improve depending on the
     // type of inorganic in the cauldron (bench)
     potion = object_find_by_type(cauldron, POTION);
     if (potion == NULL) { /* failure--no type found */
         draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_ERROR,
-                        "You need to put in the proper potion item to use bowery on this bench.");
+                        "You need to put in the proper potion item to use jewler on this bench.");
         return;
     }
     inorganic = object_find_by_type(cauldron, INORGANIC);
     if (inorganic == NULL) { /* failure--no type found */
         draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_ERROR,
-                        "You need to put in the proper inorganic item to use bowery on this bench.");
+                        "You need to put in the proper inorganic item to use jewler on this bench.");
         return;
     }
     flesh = object_find_by_type(cauldron, FLESH);
     if (flesh == NULL) { /* failure--no type found */
         draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_ERROR,
-                        "You need to put in the proper flesh item to use bowery on this bench.");
+                        "You need to put in the proper flesh item to use jewler on this bench.");
         return;
     }
 
@@ -194,7 +184,7 @@ void attempt_do_bowery(object *caster, object *cauldron) {
         }
     }
 
-    int j = find_skill_by_number(caster, SK_BOWYER)->level;
+    int j = find_skill_by_number(caster, SK_JEWELER)->level;
     int k = MIN(100, (j / 100) * 100); // minimum between 100 and skill 
     // run the success and bonus formula
     success_chance = k - (atmpt_bonus * 2);
@@ -207,31 +197,31 @@ void attempt_do_bowery(object *caster, object *cauldron) {
     
     // do a string search to see what type of stat is being improved.
 
-    if(strcmp("potionstr", potion->name) && strcmp("demon_head", flesh->name) && strcmp("cinnabar", inorganic->name)) {
+    if(strcmp("potionstr", potion->name) && strcmp("demon_head", flesh->name) && strcmp("ruby", inorganic->name)) {
         base_item->stats.Str = atmpt_bonus;
         success = TRUE; 
         }
-    else if(strcmp("potiondes", potion->name) && strcmp("demon_head", flesh->name) && strcmp("sulpher", inorganic->name)) {
+    else if(strcmp("potiondes", potion->name) && strcmp("demon_head", flesh->name) && strcmp("sapphire", inorganic->name)) {
         base_item->stats.Dex = atmpt_bonus;
         success = TRUE; 
         }
-    else if(strcmp("potionpow", potion->name) && strcmp("demon_head", flesh->name) && strcmp("pyrite", inorganic->name)) {
+    else if(strcmp("potionpow", potion->name) && strcmp("demon_head", flesh->name) && strcmp("amethyst", inorganic->name)) {
         base_item->stats.Pow = atmpt_bonus;
         success = TRUE; 
         }
-    else if(strcmp("potionint", potion->name) && strcmp("demon_head", flesh->name) && strcmp("phosphorus", inorganic->name)) {
+    else if(strcmp("potionint", potion->name) && strcmp("demon_head", flesh->name) && strcmp("mithril", inorganic->name)) {
         base_item->stats.Int = atmpt_bonus;
         success = TRUE; 
         }
-    else if(strcmp("potionwis", potion->name) && strcmp("demon_head", flesh->name) && strcmp("salt", inorganic->name)) {
+    else if(strcmp("potionwis", potion->name) && strcmp("demon_head", flesh->name) && strcmp("diamond", inorganic->name)) {
         base_item->stats.Wis = atmpt_bonus;
         success = TRUE; 
         }
-    else if(strcmp("potioncha", potion->name) && strcmp("demon_head", flesh->name) && strcmp("gypsum", inorganic->name)) {
+    else if(strcmp("potioncha", potion->name) && strcmp("demon_head", flesh->name) && strcmp("smallnugget", inorganic->name)) {
         base_item->stats.Wis = atmpt_bonus;
         success = TRUE; 
         }
-    else if(strcmp("potioncon", potion->name) && strcmp("demon_head", flesh->name) && strcmp("graphite", inorganic->name)) {
+    else if(strcmp("potioncon", potion->name) && strcmp("demon_head", flesh->name) && strcmp("emerald", inorganic->name)) {
         base_item->stats.Con = atmpt_bonus;
         success = TRUE; 
         }
