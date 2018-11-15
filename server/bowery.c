@@ -1,4 +1,4 @@
-// smithery takes a object in a couldron 
+// bowery takes a object in a couldron 
 // along with materials and gives the object a bonus
 // stats +1 to +30 OR
 // resist +1 to +115
@@ -82,14 +82,14 @@ CON: potioncon, demon_head, emerald
 #include <spells.h>
 #include <assert.h>
 
-int use_smithery(object *op) {
+int use_bowery(object *op) {
     object *unpaid_cauldron = NULL;
     object *unpaid_item = NULL;
-    int did_smithery = 0;
+    int did_bowery = 0;
     char name[MAX_BUF];
 
     if (QUERY_FLAG(op, FLAG_WIZ))
-        draw_ext_info(NDI_UNIQUE, 0, op, MSG_TYPE_COMMAND, MSG_TYPE_COMMAND_DM, "Note: smithery in wizard-mode.\n");
+        draw_ext_info(NDI_UNIQUE, 0, op, MSG_TYPE_COMMAND, MSG_TYPE_COMMAND_DM, "Note: bowery in wizard-mode.\n");
 
     FOR_MAP_PREPARE(op->map, op->x, op->y, tmp) {
         if (QUERY_FLAG(tmp, FLAG_IS_CAULDRON)) {
@@ -102,10 +102,10 @@ int use_smithery(object *op) {
                 continue;
 
             // takes the caster and cauldron and after returns updates the contents of the cauldron
-            attempt_do_smithery(op, tmp);  
+            attempt_do_bowery(op, tmp);  
             if (QUERY_FLAG(tmp, FLAG_APPLIED))
                 esrv_send_inventory(op, tmp); //ser
-            did_smithery = 1;
+            did_bowery = 1;
         }
     } FOR_MAP_FINISH();
     if (unpaid_cauldron) {
@@ -120,14 +120,14 @@ int use_smithery(object *op) {
                              name);
     }
 
-    return did_smithery; // returns 1 on success for generating xp
+    return did_bowery; // returns 1 on success for generating xp
 }
 
 /* 
 takes a list of items in the cauldron and changes it to a single
 item either good or bad
 */ 
-void attempt_do_smithery(object *caster, object *cauldron) {
+void attempt_do_bowery(object *caster, object *cauldron) {
     int stat_improve[] = {0, 3, 12, 27, 48, 75, 108, 147, 192, 243, 300, 363, 432, 507, 588, 675, 768, 867, 972, 1083, 1200, 1323, 1452, 1587, 1728, 1875, 2028, 2187, 2352, 2523, 2700};
     int success_chance;
     int success = FALSE;
@@ -149,7 +149,7 @@ void attempt_do_smithery(object *caster, object *cauldron) {
             base_item = object_find_by_type(cauldron, SHIELD);
             if (base_item == NULL) { /* failure--no type found */
                 draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_ERROR,
-                            "You need to put in a base item to use smithery on this forge.");
+                            "You need to put in a base item to use bowery on this forge.");
                 return;
             }
         }
@@ -160,19 +160,19 @@ void attempt_do_smithery(object *caster, object *cauldron) {
     potion = object_find_by_type(cauldron, POTION);
     if (potion == NULL) { /* failure--no type found */
         draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_ERROR,
-                        "You need to put in the proper potion item to use smithery on this forge.");
+                        "You need to put in the proper potion item to use bowery on this forge.");
         return;
     }
     inorganic = object_find_by_type(cauldron, INORGANIC);
     if (inorganic == NULL) { /* failure--no type found */
         draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_ERROR,
-                        "You need to put in the proper inorganic item to use smithery on this forge.");
+                        "You need to put in the proper inorganic item to use bowery on this forge.");
         return;
     }
     flesh = object_find_by_type(cauldron, FLESH);
     if (flesh == NULL) { /* failure--no type found */
         draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_ERROR,
-                        "You need to put in the proper flesh item to use smithery on this forge.");
+                        "You need to put in the proper flesh item to use bowery on this forge.");
         return;
     }
 
@@ -194,7 +194,7 @@ void attempt_do_smithery(object *caster, object *cauldron) {
         }
     }
 
-    int j = find_skill_by_number(caster, SK_SMITHERY)->level;
+    int j = find_skill_by_number(caster, SK_BOWYER)->level;
     int k = MIN(100, (j / 100) * 100); // minimum between 100 and skill 
     // run the success and bonus formula
     success_chance = k - (atmpt_bonus * 2);

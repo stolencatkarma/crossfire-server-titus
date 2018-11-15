@@ -587,6 +587,9 @@ int do_skill(object *op, object *part, object *skill, int dir, const char *strin
             exp = success = skill_ident(op, skill);
         break;
     case SK_BOWYER:
+        if (use_bowery(op) == 1)
+            exp = success = skill_ident(op, skill);
+        break;
     case SK_JEWELER:
         //TODO: using these skills while near the appropriate crafting bench will create a new item from items in the container.
         break;
