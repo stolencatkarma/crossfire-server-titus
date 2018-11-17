@@ -132,7 +132,9 @@ void attempt_do_smithery(object *caster, object *cauldron) {
     int success_chance;
     int success = FALSE;
     int atmpt_bonus = 0; // how much of a bonus we are attempting.
+    int merge_success = FALSE;
     object *base_item; // base item for crafting.
+    object *merge_item; // merge item for merging.
     object *potion; // the potion item we are using to craft
     object *inorganic; // the inorganic item we are using to craft
     object *flesh; // the flesh item we are using to craft
@@ -370,20 +372,88 @@ void attempt_do_smithery(object *caster, object *cauldron) {
         success = TRUE; 
         }
 
-    else {
-        draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_ERROR,
-                        "Those are not the right items to craft that.");
-        return;
+    else
+    {
+        // no 'recipe' found check for merge.
+        // let's see if we can find another item like our base item.
+        if(base_item->type == WEAPON)
+        {
+            base_item->type = NULL; // set out base item to null temp so we can search again by type.
+            merge_item = object_find_by_type(cauldron, WEAPON);
+            if (merge_item == NULL) { /* failure--no type found */
+                base_item->type = WEAPON; // set it back
+                draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_FAILURE,
+                        "You need two base items of the same type to merge.");
+                return;
+            }
+        }
+        else if(base_item->type == ARMOUR)
+        {
+            base_item->type = NULL; // set out base item to null temp so we can search again by type.
+            merge_item = object_find_by_type(cauldron, ARMOUR);
+            if (merge_item == NULL) { /* failure--no type found */
+                base_item->type = ARMOUR; // set it back
+                draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_FAILURE,
+                        "You need two base items of the same type to merge.");
+                return;
+            }
+        }
+        else if(base_item->type == SHIELD)
+        {
+            base_item->type = NULL; // set out base item to null temp so we can search again by type.
+            merge_item = object_find_by_type(cauldron, SHIELD);
+            if (merge_item == NULL) { /* failure--no type found */
+                base_item->type = SHIELD; // set it back
+                draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_FAILURE,
+                        "You need two base items of the same type to merge.");
+                return;
+            }
+        }
+        // we have a merge item. merge the merge_item and base_item stats.
+        // on failure flip all stats to negative.
+        base_item->stats.Str += merge_item->stats.Str;
+        base_item->stats.Dex += merge_item->stats.Dex;
+        base_item->stats.Con += merge_item->stats.Con;
+        base_item->stats.Wis += merge_item->stats.Wis;
+        base_item->stats.Cha += merge_item->stats.Cha;
+        base_item->stats.Int += merge_item->stats.Int;
+        base_item->stats.Pow += merge_item->stats.Pow;
+        base_item->stats.ac += merge_item->stats.ac;
+        base_item->stats.luck += merge_item->stats.luck;
+        base_item->stats.hp += merge_item->stats.hp;
+        base_item->stats.maxhp += merge_item->stats.maxhp;
+        base_item->stats.grace += merge_item->stats.grace;
+        base_item->stats.maxgrace += merge_item->stats.maxgrace;
+        int l = 0;
+        
+        for( l = 0; l < NROFATTACKS; l++)
+        {
+            // merge resists
+            base_item->resist[l] += merge_item->resist[l]; 
+        }
+        merge_success = TRUE;
+        
     }
+    
 
-    // if we make ANY object reduce the stack sizes by an appropriate amount.
+    // if we craft ANY object reduce the stack sizes by an appropriate amount.
     if(success) {
         object_decrease_nrof(potion, MAX(1, stat_improve[abs(atmpt_bonus)] / 5)); // decreaase the stack size taking into account 1/5th requirements
-        object_decrease_nrof(inorganic, stat_improve[abs(atmpt_bonus)]); // decreaase the stack size.
-        object_decrease_nrof(flesh, stat_improve[abs(atmpt_bonus)]); // decreaase the stack size.
+        object_decrease_nrof(inorganic, stat_improve[abs(atmpt_bonus)]); // decrease the stack size.
+        object_decrease_nrof(flesh, stat_improve[abs(atmpt_bonus)]); // decrease the stack size.
         SET_FLAG(cauldron, FLAG_APPLIED); // not sure we need this but i don't think it hurts.
         draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_SUCCESS,
                         "You successfully crafted the item.");
+        return;
+    }
+
+    if(merge_success)
+    {
+        // remove merge item, we should have edited the base item.
+        object_decrease_nrof(merge_item, 1); // decrease the stack size.
+        SET_FLAG(cauldron, FLAG_APPLIED); // not sure we need this but i don't think it hurts.
+        draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_SUCCESS,
+                        "You successfully merged the items.");
         return;
     }
 
