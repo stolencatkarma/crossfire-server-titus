@@ -170,14 +170,14 @@ void attempt_do_smithery(object *caster, object *cauldron) {
     // do a string search to see what type of stat is being improved.
     if (potion == NULL || inorganic == NULL || flesh == NULL) { /* failure--no type found */
         // if any of the crafting items arent found try to merge.
-         // no 'recipe' found check for merge.
+        // no 'recipe' found check for merge.
         // let's see if we can find another item like our base item.
         object *tmp; 
         if(base_item->type == WEAPON)
         {
             for (tmp = cauldron->inv; tmp; tmp = tmp->below) {
                 if (tmp->type == WEAPON) {
-                    if(tmp =! base_item) {
+                    if(tmp != base_item) {
                         merge_item = tmp;
                         break;
                     }
@@ -193,7 +193,7 @@ void attempt_do_smithery(object *caster, object *cauldron) {
         {
             for (tmp = cauldron->inv; tmp; tmp = tmp->below) {
                 if (tmp->type == ARMOUR) {
-                    if(tmp =! base_item) {
+                    if(tmp != base_item) {
                         merge_item = tmp;
                         break;
                     }
@@ -209,7 +209,7 @@ void attempt_do_smithery(object *caster, object *cauldron) {
         {
             for (tmp = cauldron->inv; tmp; tmp = tmp->below) {
                 if (tmp->type == SHIELD) {
-                    if(tmp =! base_item) {
+                    if(tmp != base_item) {
                         merge_item = tmp;
                         break;
                     }
@@ -463,8 +463,8 @@ void attempt_do_smithery(object *caster, object *cauldron) {
             success = TRUE; 
             }
         else if(strcmp("vial_green", potion->name) && strcmp("residue", flesh->name) && strcmp("uraniumpile", inorganic->name)) {
-        base_item->resist[25] = atmpt_bonus;
-        success = TRUE; 
+            base_item->resist[25] = atmpt_bonus;
+            success = TRUE; 
         }
 
     }
