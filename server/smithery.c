@@ -197,12 +197,17 @@ void attempt_do_smithery(object *caster, object *cauldron) {
         // if any of the crafting items arent found try to merge.
          // no 'recipe' found check for merge.
         // let's see if we can find another item like our base item.
+        object *tmp; 
         if(base_item->type == WEAPON)
         {
-            base_item->type = NULL; // set out base item to null temp so we can search again by type.
-            merge_item = object_find_by_type(cauldron, WEAPON);
+            for (tmp = cauldron->inv; tmp; tmp = tmp->below) {
+                if (tmp->type == WEAPON) {
+                    if(tmp =! base_item) {
+                        merge_item = tmp;
+                    }
+                }
+            }
             if (merge_item == NULL) { /* failure--no type found */
-                base_item->type = WEAPON; // set it back
                 draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_FAILURE,
                         "You need two base items of the same type to merge.");
                 return;
@@ -210,10 +215,14 @@ void attempt_do_smithery(object *caster, object *cauldron) {
         }
         else if(base_item->type == ARMOUR)
         {
-            base_item->type = NULL; // set out base item to null temp so we can search again by type.
-            merge_item = object_find_by_type(cauldron, ARMOUR);
+            for (tmp = cauldron->inv; tmp; tmp = tmp->below) {
+                if (tmp->type == ARMOUR) {
+                    if(tmp =! base_item) {
+                        merge_item = tmp;
+                    }
+                }
+            }
             if (merge_item == NULL) { /* failure--no type found */
-                base_item->type = ARMOUR; // set it back
                 draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_FAILURE,
                         "You need two base items of the same type to merge.");
                 return;
@@ -221,10 +230,14 @@ void attempt_do_smithery(object *caster, object *cauldron) {
         }
         else if(base_item->type == SHIELD)
         {
-            base_item->type = NULL; // set out base item to null temp so we can search again by type.
-            merge_item = object_find_by_type(cauldron, SHIELD);
+            for (tmp = cauldron->inv; tmp; tmp = tmp->below) {
+                if (tmp->type == SHIELD) {
+                    if(tmp =! base_item) {
+                        merge_item = tmp;
+                    }
+                }
+            }
             if (merge_item == NULL) { /* failure--no type found */
-                base_item->type = SHIELD; // set it back
                 draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_FAILURE,
                         "You need two base items of the same type to merge.");
                 return;
