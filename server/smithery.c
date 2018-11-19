@@ -204,6 +204,7 @@ void attempt_do_smithery(object *caster, object *cauldron) {
                 if (tmp->type == WEAPON) {
                     if(tmp =! base_item) {
                         merge_item = tmp;
+                        break;
                     }
                 }
             }
@@ -219,6 +220,7 @@ void attempt_do_smithery(object *caster, object *cauldron) {
                 if (tmp->type == ARMOUR) {
                     if(tmp =! base_item) {
                         merge_item = tmp;
+                        break;
                     }
                 }
             }
@@ -234,6 +236,7 @@ void attempt_do_smithery(object *caster, object *cauldron) {
                 if (tmp->type == SHIELD) {
                     if(tmp =! base_item) {
                         merge_item = tmp;
+                        break;
                     }
                 }
             }
