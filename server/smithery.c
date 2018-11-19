@@ -163,35 +163,10 @@ void attempt_do_smithery(object *caster, object *cauldron) {
     inorganic = object_find_by_type(cauldron, INORGANIC);
     flesh = object_find_by_type(cauldron, FLESH);
 
-    // level zero is +0, start at +1 bonus
-    size_t i = 1;
-    for(i; i < 31; i++) {
-        if(potion->nrof >= stat_improve[i] / 5) { // use our list of needed mats to improve stats
-            atmpt_bonus = i; // potions use 1/5th the requirements.
-        } 
-        // use our list of needed mats to improve stats but dont go over the current atmpt_bonus
-        if(inorganic->nrof >= stat_improve[i] && i < atmpt_bonus) { 
-            atmpt_bonus = i; 
-        }
-        if(flesh->nrof >= stat_improve[i] && i < atmpt_bonus) { 
-            atmpt_bonus = i; 
-        }
-        if(i > atmpt_bonus){
-            break; // once we hit our max atmpt_bonus we can break out.
-        }
-    }
-
+   
     int j = find_skill_by_number(caster, SK_SMITHERY)->level;
     int k = MIN(100, j); // minimum between 100 and skill 
-    // run the success and bonus formula
-    success_chance = k - (atmpt_bonus * 2);
-    if(rndm(0, 100) <= success_chance) {
-        // do nothing
-    } 
-    else {
-        atmpt_bonus = atmpt_bonus * -1; // flip to a negative bonus, caster recieves items either way.
-    }
-    
+        
     // do a string search to see what type of stat is being improved.
     if (potion == NULL || inorganic == NULL || flesh == NULL) { /* failure--no type found */
         // if any of the crafting items arent found try to merge.
@@ -247,8 +222,17 @@ void attempt_do_smithery(object *caster, object *cauldron) {
             }
         }
         // we have a merge item. merge the merge_item and base_item stats.
+        // run the success and bonus formula
+        success_chance = k - (atmpt_bonus * 2);
+        if(rndm(0, 100) <= success_chance) {
+            // do nothing
+        } 
+        else {
+            atmpt_bonus = atmpt_bonus * -1; // flip to a negative bonus, caster recieves items either way.
+        }
         // on failure flip all stats to negative.
         base_item->stats.Str += merge_item->stats.Str;
+        
         base_item->stats.Dex += merge_item->stats.Dex;
         base_item->stats.Con += merge_item->stats.Con;
         base_item->stats.Wis += merge_item->stats.Wis;
@@ -268,9 +252,57 @@ void attempt_do_smithery(object *caster, object *cauldron) {
             // merge resists
             base_item->resist[l] += merge_item->resist[l]; 
         }
+        if(atmpt_bonus < 0)
+        {
+            base_item->stats.Str = base_item->stats.Str * -1;
+            base_item->stats.Con = base_item->stats.Con * -1;
+            base_item->stats.Wis = base_item->stats.Wis * -1;
+            base_item->stats.Cha = base_item->stats.Cha * -1;
+            base_item->stats.Int = base_item->stats.Int * -1;
+            base_item->stats.Pow = base_item->stats.Pow * -1;
+            base_item->stats.ac = base_item->stats.ac * -1;
+            base_item->stats.luck = base_item->stats.luck * -1;
+            base_item->stats.hp = base_item->stats.hp * -1;
+            base_item->stats.maxhp = base_item->stats.maxhp * -1;
+            base_item->stats.grace = base_item->stats.grace * -1;
+            base_item->stats.maxgrace = base_item->stats.maxgrace * -1;
+            int m = 0;
+            for( m = 0; m < NROFATTACKS; m++)
+                {
+                    // negative resists as well
+                    base_item->resist[m] = merge_item->resist[m] * -1; 
+                }
+
+        }
         merge_success = TRUE;
     }
-    else{
+    else
+    {
+        // level zero is +0, start at +1 bonus
+        size_t i = 1;
+        for(i; i < 31; i++) {
+            if(potion->nrof >= stat_improve[i] / 5) { // use our list of needed mats to improve stats
+                atmpt_bonus = i; // potions use 1/5th the requirements.
+            } 
+            // use our list of needed mats to improve stats but dont go over the current atmpt_bonus
+            if(inorganic->nrof >= stat_improve[i] && i < atmpt_bonus) { 
+                atmpt_bonus = i; 
+            }
+            if(flesh->nrof >= stat_improve[i] && i < atmpt_bonus) { 
+                atmpt_bonus = i; 
+            }
+            if(i > atmpt_bonus){
+                break; // once we hit our max atmpt_bonus we can break out.
+            }
+        }
+        success_chance = k - (atmpt_bonus * 2);
+        if(rndm(0, 100) <= success_chance) {
+            // do nothing
+        } 
+        else {
+            atmpt_bonus = atmpt_bonus * -1; // flip to a negative bonus, caster recieves items either way.
+        }
+
         // have all the ingredients necessary. 
         if(strcmp("potionstr", potion->name) && strcmp("demon_head", flesh->name) && strcmp("cinnabar", inorganic->name)) {
             base_item->stats.Str = atmpt_bonus;
