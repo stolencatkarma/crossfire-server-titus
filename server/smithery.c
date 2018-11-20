@@ -223,6 +223,7 @@ void attempt_do_smithery(object *caster, object *cauldron) {
         }
         // we have a merge item. merge the merge_item and base_item stats.
         // run the success and bonus formula
+        atmpt_bonus = 1;
         success_chance = k - (atmpt_bonus * 2);
         if(rndm(0, 100) <= success_chance) {
             // do nothing
@@ -232,25 +233,25 @@ void attempt_do_smithery(object *caster, object *cauldron) {
         }
         // on failure flip all stats to negative.
         if(merge_item != NULL){
-            base_item->stats.Str += merge_item->stats.Str;
-            base_item->stats.Dex += merge_item->stats.Dex;
-            base_item->stats.Con += merge_item->stats.Con;
-            base_item->stats.Wis += merge_item->stats.Wis;
-            base_item->stats.Cha += merge_item->stats.Cha;
-            base_item->stats.Int += merge_item->stats.Int;
-            base_item->stats.Pow += merge_item->stats.Pow;
-            base_item->stats.ac += merge_item->stats.ac;
-            base_item->stats.luck += merge_item->stats.luck;
-            base_item->stats.hp += merge_item->stats.hp;
-            base_item->stats.maxhp += merge_item->stats.maxhp;
-            base_item->stats.grace += merge_item->stats.grace;
-            base_item->stats.maxgrace += merge_item->stats.maxgrace;
-            int l = 0;
-            
-            for( l = 0; l < NROFATTACKS; l++)
+            base_item->stats.Str = MAX(base_item->stats.Str, merge_item->stats.Str);
+            base_item->stats.Dex = MAX(base_item->stats.Dex, merge_item->stats.Dex);
+            base_item->stats.Con = MAX(base_item->stats.Con, merge_item->stats.Con);
+            base_item->stats.Wis = MAX(base_item->stats.Wis, merge_item->stats.Wis);
+            base_item->stats.Cha = MAX(base_item->stats.Cha, merge_item->stats.Cha);
+            base_item->stats.Int = MAX(base_item->stats.Int, merge_item->stats.Int);
+            base_item->stats.Pow = MAX(base_item->stats.Pow, merge_item->stats.Pow);
+            base_item->stats.ac = MAX(base_item->stats.ac, merge_item->stats.ac);
+            base_item->stats.luck = MAX(base_item->stats.luck, merge_item->stats.luck);
+            base_item->stats.hp = MAX(base_item->stats.hp, merge_item->stats.hp);
+            base_item->stats.maxhp = MAX(base_item->stats.maxhp, merge_item->stats.maxhp);
+            base_item->stats.grace = MAX(base_item->stats.grace, merge_item->stats.grace);
+            base_item->stats.maxgrace = MAX(base_item->stats.maxgrace, merge_item->stats.maxgrace);
+
+            int l;
+            for(l = 0; l < NROFATTACKS; l++)
             {
                 // merge resists
-                base_item->resist[l] += merge_item->resist[l]; 
+                base_item->resist[l] = MAX(merge_item->resist[l], base_item->resist[l]);
             }
             if(atmpt_bonus < 0)
             {
@@ -277,7 +278,7 @@ void attempt_do_smithery(object *caster, object *cauldron) {
             merge_success = TRUE;
         }
     }
-    else
+    else // we have the ingredients to craft mods. 
     {
         // level zero is +0, start at +1 bonus
         size_t i = 1;
