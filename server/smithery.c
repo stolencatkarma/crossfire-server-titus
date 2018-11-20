@@ -50,7 +50,7 @@ Special_food:     tongue, phil_salt, water
 12 Resist_Paralyze:      insect_stinger,    uraniumpile, vial_green
 13 Resist_Turn_Undead:   tooth,             uraniumpile, vial_red
 14 Resist_Fear:          demon_head,        uraniumpile, potion_heroism
-16 Resist_Deplete:       heart,             uraniumpile, vial_red 
+16 Resist_Deplete:       heart,             uraniumpile, potion_empty 
 17 Resist_Death:         head,              uraniumpile, vial_red
 21 Resist_Holyword:      bat_wing,          uraniumpile, vial_water
 22 Resist_blind:         eye,               uraniumpile, potion_empty
@@ -134,7 +134,7 @@ void attempt_do_smithery(object *caster, object *cauldron) {
     int atmpt_bonus = 0; // how much of a bonus we are attempting.
     int merge_success = FALSE;
     object *base_item; // base item for crafting.
-    object *merge_item; // merge item for merging.
+    object *merge_item = NULL; // merge item for merging. init NULL to avoid cppcheck errors
     object *potion; // the potion item we are using to craft
     object *inorganic; // the inorganic item we are using to craft
     object *flesh; // the flesh item we are using to craft
@@ -231,50 +231,51 @@ void attempt_do_smithery(object *caster, object *cauldron) {
             atmpt_bonus = atmpt_bonus * -1; // flip to a negative bonus, caster recieves items either way.
         }
         // on failure flip all stats to negative.
-        base_item->stats.Str += merge_item->stats.Str;
-        
-        base_item->stats.Dex += merge_item->stats.Dex;
-        base_item->stats.Con += merge_item->stats.Con;
-        base_item->stats.Wis += merge_item->stats.Wis;
-        base_item->stats.Cha += merge_item->stats.Cha;
-        base_item->stats.Int += merge_item->stats.Int;
-        base_item->stats.Pow += merge_item->stats.Pow;
-        base_item->stats.ac += merge_item->stats.ac;
-        base_item->stats.luck += merge_item->stats.luck;
-        base_item->stats.hp += merge_item->stats.hp;
-        base_item->stats.maxhp += merge_item->stats.maxhp;
-        base_item->stats.grace += merge_item->stats.grace;
-        base_item->stats.maxgrace += merge_item->stats.maxgrace;
-        int l = 0;
-        
-        for( l = 0; l < NROFATTACKS; l++)
-        {
-            // merge resists
-            base_item->resist[l] += merge_item->resist[l]; 
-        }
-        if(atmpt_bonus < 0)
-        {
-            base_item->stats.Str = base_item->stats.Str * -1;
-            base_item->stats.Con = base_item->stats.Con * -1;
-            base_item->stats.Wis = base_item->stats.Wis * -1;
-            base_item->stats.Cha = base_item->stats.Cha * -1;
-            base_item->stats.Int = base_item->stats.Int * -1;
-            base_item->stats.Pow = base_item->stats.Pow * -1;
-            base_item->stats.ac = base_item->stats.ac * -1;
-            base_item->stats.luck = base_item->stats.luck * -1;
-            base_item->stats.hp = base_item->stats.hp * -1;
-            base_item->stats.maxhp = base_item->stats.maxhp * -1;
-            base_item->stats.grace = base_item->stats.grace * -1;
-            base_item->stats.maxgrace = base_item->stats.maxgrace * -1;
-            int m = 0;
-            for( m = 0; m < NROFATTACKS; m++)
-                {
-                    // negative resists as well
-                    base_item->resist[m] = merge_item->resist[m] * -1; 
-                }
+        if(merge_item != NULL){
+            base_item->stats.Str += merge_item->stats.Str;
+            base_item->stats.Dex += merge_item->stats.Dex;
+            base_item->stats.Con += merge_item->stats.Con;
+            base_item->stats.Wis += merge_item->stats.Wis;
+            base_item->stats.Cha += merge_item->stats.Cha;
+            base_item->stats.Int += merge_item->stats.Int;
+            base_item->stats.Pow += merge_item->stats.Pow;
+            base_item->stats.ac += merge_item->stats.ac;
+            base_item->stats.luck += merge_item->stats.luck;
+            base_item->stats.hp += merge_item->stats.hp;
+            base_item->stats.maxhp += merge_item->stats.maxhp;
+            base_item->stats.grace += merge_item->stats.grace;
+            base_item->stats.maxgrace += merge_item->stats.maxgrace;
+            int l = 0;
+            
+            for( l = 0; l < NROFATTACKS; l++)
+            {
+                // merge resists
+                base_item->resist[l] += merge_item->resist[l]; 
+            }
+            if(atmpt_bonus < 0)
+            {
+                base_item->stats.Str = base_item->stats.Str * -1;
+                base_item->stats.Con = base_item->stats.Con * -1;
+                base_item->stats.Wis = base_item->stats.Wis * -1;
+                base_item->stats.Cha = base_item->stats.Cha * -1;
+                base_item->stats.Int = base_item->stats.Int * -1;
+                base_item->stats.Pow = base_item->stats.Pow * -1;
+                base_item->stats.ac = base_item->stats.ac * -1;
+                base_item->stats.luck = base_item->stats.luck * -1;
+                base_item->stats.hp = base_item->stats.hp * -1;
+                base_item->stats.maxhp = base_item->stats.maxhp * -1;
+                base_item->stats.grace = base_item->stats.grace * -1;
+                base_item->stats.maxgrace = base_item->stats.maxgrace * -1;
+                int m = 0;
+                for( m = 0; m < NROFATTACKS; m++)
+                    {
+                        // negative resists as well
+                        base_item->resist[m] = merge_item->resist[m] * -1; 
+                    }
 
+            }
+            merge_success = TRUE;
         }
-        merge_success = TRUE;
     }
     else
     {
@@ -325,7 +326,7 @@ void attempt_do_smithery(object *caster, object *cauldron) {
             success = TRUE; 
             }
         else if(strcmp("potioncha", potion->name) && strcmp("demon_head", flesh->name) && strcmp("gypsum", inorganic->name)) {
-            base_item->stats.Wis = atmpt_bonus;
+            base_item->stats.Cha = atmpt_bonus;
             success = TRUE; 
             }
         else if(strcmp("potioncon", potion->name) && strcmp("demon_head", flesh->name) && strcmp("graphite", inorganic->name)) {
@@ -334,15 +335,30 @@ void attempt_do_smithery(object *caster, object *cauldron) {
             }
         // end base stats part.
         else if(strcmp("vial_yellow", potion->name) && strcmp("bat_wing", flesh->name) && strcmp("phil_salt", inorganic->name)) {
+            if(base_item->type == WEAPON){
+                draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_SUCCESS,
+                            "You cannot add ac to a weapon.");
+                return;
+            }
             base_item->stats.ac = atmpt_bonus;
             success = TRUE; 
             }
         else if(strcmp("vial_yellow", potion->name) && strcmp("hand", flesh->name) && strcmp("phil_salt", inorganic->name)) {
+            if(base_item->type != WEAPON){
+                draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_SUCCESS,
+                            "You need to add this stat to a weapon.");
+                return;
+            }
             base_item->stats.wc = atmpt_bonus;
             success = TRUE; 
             }
         else if(strcmp("vial_yellow", potion->name) && strcmp("insect_stinger", flesh->name) && strcmp("phil_salt", inorganic->name)) {
             base_item->stats.dam = atmpt_bonus;
+            if(base_item->type != WEAPON){
+                draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_SUCCESS,
+                            "You need to add this stat to a weapon.");
+                return;
+            }
             success = TRUE; 
             }
         else if(strcmp("vial_green", potion->name) && strcmp("serp_skin", flesh->name) && strcmp("phil_salt", inorganic->name)) {
@@ -442,7 +458,7 @@ void attempt_do_smithery(object *caster, object *cauldron) {
             base_item->resist[14] = atmpt_bonus;
             success = TRUE; 
             }
-        else if(strcmp("vial_red", potion->name) && strcmp("heart", flesh->name) && strcmp("uraniumpile", inorganic->name)) {
+        else if(strcmp("potion_empty", potion->name) && strcmp("heart", flesh->name) && strcmp("uraniumpile", inorganic->name)) {
             base_item->resist[16] = atmpt_bonus;
             success = TRUE; 
             }
