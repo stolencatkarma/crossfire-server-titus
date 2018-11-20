@@ -82,7 +82,7 @@ CON: potioncon, demon_head, emerald
 #include <spells.h>
 #include <assert.h>
 
-int use_bowyer(object *op) {
+int use_bowery(object *op) {
     object *unpaid_cauldron = NULL;
     object *unpaid_item = NULL;
     int did_bowyer = 0;
