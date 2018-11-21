@@ -4,7 +4,8 @@
         "includes.h": "c",
         "skills.h": "c",
         "define.h": "c",
-        "ob_types.h": "c"
+        "ob_types.h": "c",
+        "object.h": "c"
     },
     "editor.fontSize": 16,
     "editor.fontFamily": "Consolas, 'Courier New', monospace"
