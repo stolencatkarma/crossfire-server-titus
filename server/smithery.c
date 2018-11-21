@@ -310,7 +310,7 @@ void attempt_do_smithery(object *caster, object *cauldron) {
         }
 
         // have all the ingredients necessary. 
-        if(strcmp("potionstr", potion->arch) == 0 && strcmp("demon_head", flesh->arch) == 0 && strcmp("cinnabar", inorganic->arch) == 0 ) {
+        if(strcmp("potion of strength", potion->name) == 0 && strcmp("head", flesh->name) == 0 && strcmp("pile", inorganic->name) == 0 ) {
             base_item->stats.Str = atmpt_bonus;
             success = TRUE; 
             }
