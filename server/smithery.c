@@ -50,10 +50,10 @@ Special_food:     tongue, phil_salt, water
 12 Resist_Paralyze:      insect_stinger,    uraniumpile, vial_green
 13 Resist_Turn_Undead:   tooth,             uraniumpile, vial_red
 14 Resist_Fear:          demon_head,        uraniumpile, potion_heroism
-16 Resist_Deplete:       heart,             uraniumpile, potion_empty 
+16 Resist_Deplete:       heart,             uraniumpile, wine 
 17 Resist_Death:         head,              uraniumpile, vial_red
 21 Resist_Holyword:      bat_wing,          uraniumpile, vial_water
-22 Resist_blind:         eye,               uraniumpile, potion_empty
+22 Resist_blind:         eye,               uraniumpile, wine
 24 Resist_Life_Stealing: skin,              uraniumpile, vial_red
 25 Resist_Disease:       residue,           uraniumpile, vial_green
 
@@ -160,6 +160,10 @@ void attempt_do_smithery(object *caster, object *cauldron) {
     // now that we have our base_item set we need to pick a stat to improve depending on the
     // type of inorganic in the cauldron (forge)
     potion = object_find_by_type(cauldron, POTION);
+    if (potion == NULL)
+    {
+        potion = object_find_by_type(cauldron, DRINK);
+    }
     inorganic = object_find_by_type(cauldron, INORGANIC);
     flesh = object_find_by_type(cauldron, FLESH);
 
@@ -459,7 +463,7 @@ void attempt_do_smithery(object *caster, object *cauldron) {
             base_item->resist[14] = atmpt_bonus;
             success = TRUE; 
             }
-        else if(strcmp("potion_empty", potion->name) && strcmp("heart", flesh->name) && strcmp("uraniumpile", inorganic->name)) {
+        else if(strcmp("wine", potion->name) && strcmp("heart", flesh->name) && strcmp("uraniumpile", inorganic->name)) {
             base_item->resist[16] = atmpt_bonus;
             success = TRUE; 
             }
@@ -471,7 +475,7 @@ void attempt_do_smithery(object *caster, object *cauldron) {
             base_item->resist[21] = atmpt_bonus;
             success = TRUE; 
             }
-        else if(strcmp("potion_empty", potion->name) && strcmp("eye", flesh->name) && strcmp("uraniumpile", inorganic->name)) {
+        else if(strcmp("wine", potion->name) && strcmp("eye", flesh->name) && strcmp("uraniumpile", inorganic->name)) {
             base_item->resist[22] = atmpt_bonus;
             success = TRUE; 
             }
