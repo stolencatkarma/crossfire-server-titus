@@ -495,6 +495,7 @@ void attempt_do_smithery(object *caster, object *cauldron) {
         object_decrease_nrof(potion, MAX(1, stat_improve[abs(atmpt_bonus)] / 5)); // decreaase the stack size taking into account 1/5th requirements
         object_decrease_nrof(inorganic, stat_improve[abs(atmpt_bonus)]); // decrease the stack size.
         object_decrease_nrof(flesh, stat_improve[abs(atmpt_bonus)]); // decrease the stack size.
+        SET_FLAG(base_item, FLAG_IDENTIFIED);
         SET_FLAG(cauldron, FLAG_APPLIED); // not sure we need this but i don't think it hurts.
         if(atmpt_bonus > 0) { 
             draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_SUCCESS,
@@ -504,7 +505,7 @@ void attempt_do_smithery(object *caster, object *cauldron) {
         else 
         {
             draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_SUCCESS,
-                            "You failed to craft the item.");
+                            "You crafted the item but it has become cursed!.");
         }
         return;
     }
@@ -513,6 +514,7 @@ void attempt_do_smithery(object *caster, object *cauldron) {
     {
         // remove merge item, we should have edited the base item.
         object_decrease_nrof(merge_item, 1); // decrease the stack size.
+        SET_FLAG(merge_item, FLAG_IDENTIFIED);
         SET_FLAG(cauldron, FLAG_APPLIED); // not sure we need this but i don't think it hurts.
         if(atmpt_bonus > 0) { 
             draw_ext_info(NDI_UNIQUE, 0, caster, MSG_TYPE_SKILL, MSG_TYPE_SKILL_SUCCESS,

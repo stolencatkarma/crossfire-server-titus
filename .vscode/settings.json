@@ -5,7 +5,9 @@
         "skills.h": "c",
         "define.h": "c",
         "ob_types.h": "c",
-        "object.h": "c"
+        "object.h": "c",
+        "ob_methods.h": "c",
+        "citylife.h": "c"
     },
     "editor.fontSize": 16,
     "editor.fontFamily": "Consolas, 'Courier New', monospace"
