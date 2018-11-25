@@ -13,7 +13,7 @@
 #define AFX_STDAFX_H__31666CA1_2474_11D5_AE6C_F07569C10000__INCLUDED_
 
 /* Define the version here.  In Unixland, it's defined on the command line now. */
-#define VERSION "2.1.1 (titus fixes by andrew)"
+#define VERSION "2.1.1 - titus fixes"
 
 #pragma warning(disable: 4761) /* integral size mismatch in argument; conversion supplied */
 
