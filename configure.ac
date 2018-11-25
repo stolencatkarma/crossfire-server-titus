@@ -7,7 +7,7 @@ AC_CONFIG_MACRO_DIR([macros])
 AC_CONFIG_SRCDIR([server/main.c])
 AC_PREFIX_DEFAULT([/usr/games/crossfire])
 AM_INIT_AUTOMAKE
-AM_INIT_AUTOMAKE([subdir-objects])
+
 
 ##############################################################################
 # Configuration Options
