@@ -815,12 +815,12 @@ static int start_animation(object *who, object *activator, object *event, const 
     int     always_delete = 0;
     int     delete_end = 0;
     int     parallel = 0;
-    int     paralyzed = 1;
+    int     paralyzed = 0;
     int     invisible = 0;
     int     wizard = 0;
     enum    time_enum timetype;
     int     errors_allowed = 0;
-    int     verbose = TRUE;
+    int     verbose = 1;
     const char *animationitem = NULL;
     char    buffer[HUGE_BUF];
     char    *variable;
