@@ -691,7 +691,7 @@
  * information that is specified later).  If this is not set, the player
  * will be saved at his present location.
  */
-/*#define BACKUP_SAVE_AT_HOME*/
+#define BACKUP_SAVE_AT_HOME
 
 /**
  * RESET_LOCATION_TIME is the number of seconds that must elapse before
