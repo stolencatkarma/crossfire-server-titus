@@ -820,7 +820,7 @@ static int start_animation(object *who, object *activator, object *event, const 
     int     wizard = 0;
     enum    time_enum timetype;
     int     errors_allowed = 0;
-    int     verbose = 0;
+    int     verbose = TRUE;
     const char *animationitem = NULL;
     char    buffer[HUGE_BUF];
     char    *variable;
