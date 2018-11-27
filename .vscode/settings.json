@@ -10,7 +10,8 @@
         "citylife.h": "c",
         "cfpython.h": "c",
         "svnversion.h": "c",
-        "logger.h": "c"
+        "logger.h": "c",
+        "cfanim.h": "c"
     },
     "editor.fontSize": 16,
     "editor.fontFamily": "Consolas, 'Courier New', monospace"

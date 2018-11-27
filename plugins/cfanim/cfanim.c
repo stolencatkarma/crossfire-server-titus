@@ -597,7 +597,8 @@ static CFmovement *parse_animation_block(char *buffer, size_t buffer_size, FILE 
     int tick;
     CFanimationHook *animationhook;
 
-    cf_log(llevDebug, "CFAnim: In parse block for %s\n", buffer);
+    if (parent->verbose)
+        cf_log(llevDebug, "CFAnim: In parse block for %s\n", buffer);
     while (fgets(buffer, buffer_size, fichier)) {
         if (buffer[0] == '[')
             break;
@@ -813,12 +814,12 @@ static int start_animation(object *who, object *activator, object *event, const 
     int     always_delete = 0;
     int     delete_end = 0;
     int     parallel = 0;
-    int     paralyzed = 0;
+    int     paralyzed = 1;
     int     invisible = 0;
     int     wizard = 0;
     enum    time_enum timetype;
     int     errors_allowed = 0;
-    int     verbose = 1;
+    int     verbose = 0;
     const char *animationitem = NULL;
     char    buffer[HUGE_BUF];
     char    *variable;
