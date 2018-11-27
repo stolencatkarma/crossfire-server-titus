@@ -649,7 +649,7 @@ static void add_npcs_to_map(mapstruct *map) {
         return;
 
     add = 1+RANDOM()%zone->population;
-    cf_log(llevDebug, PLUGIN_NAME ": adding %d NPC to map %s.\n", add, map->path);
+    //cf_log(llevDebug, PLUGIN_NAME ": adding %d NPC to map %s.\n", add, map->path);
 
     while (add-- >= 0) {
         add_npc_to_zone(zone, map);
@@ -665,7 +665,7 @@ static void add_npc_to_random_map(void) {
     int zones[50];
     count = 0;
 
-    cf_log(llevDebug, PLUGIN_NAME ": adding NPC to random map.\n");
+    //cf_log(llevDebug, PLUGIN_NAME ": adding NPC to random map.\n");
 
     for (test = 0; available_zones[test].count_points != -1 && count < 50; test++) {
         if ((list[count] = cf_map_has_been_loaded(available_zones[test].mapname)) && (list[count]->in_memory == MAP_IN_MEMORY)) {
@@ -769,7 +769,7 @@ CF_PLUGIN int eventListener(int *type, ...) {
                 for (inv = cf_object_get_object_property(who, CFAPI_OBJECT_PROP_INVENTORY); inv; inv = cf_object_get_object_property(inv, CFAPI_OBJECT_PROP_OB_BELOW))
                     cf_object_set_flag(inv, FLAG_NO_DROP, 1);
 
-                cf_log(llevDebug, PLUGIN_NAME ": NPC entering building.\n");
+                //cf_log(llevDebug, PLUGIN_NAME ": NPC entering building.\n");
                 cf_object_remove(who);
                 cf_object_free_drop_inventory(who);
                 return rv;

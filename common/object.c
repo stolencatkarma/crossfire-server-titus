@@ -4318,9 +4318,11 @@ static int object_set_value_s(object *op, const char *canonical_key, const char 
                 break;
             }
         }
+        /*
         if (whitelist[index] == NULL) {
             LOG(llevDebug, "set_ob_value_s: '%s' '%s' %d\n", canonical_key, value ? value : "null", add_key);
         }
+        */
     }
 
     for (field = op->key_values; field != NULL; field = field->next) {
