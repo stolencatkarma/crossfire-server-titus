@@ -77,8 +77,7 @@ static anim_move_result runmovement(struct CFanimation_struct *animation, long i
     object *op = animation->victim;
     int dir = id;
 
-    if (animation->verbose)
-        LOG(llevDebug, "CFAnim: Moving in direction %ld\n", id);
+    LOG(llevDebug, "CFAnim: Moving in direction %ld\n", id);
     if (op->type == PLAYER)
         cf_player_move(op->contr, dir);
     else
@@ -598,8 +597,7 @@ static CFmovement *parse_animation_block(char *buffer, size_t buffer_size, FILE 
     int tick;
     CFanimationHook *animationhook;
 
-    if (parent->verbose)
-        LOG(llevDebug, "CFAnim: In parse block for %s\n", buffer);
+    LOG(llevDebug, "CFAnim: In parse block for %s\n", buffer);
     while (fgets(buffer, buffer_size, fichier)) {
         if (buffer[0] == '[')
             break;
