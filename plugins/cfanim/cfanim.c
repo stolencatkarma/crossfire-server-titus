@@ -1180,6 +1180,7 @@ CF_PLUGIN int postInitPlugin(void) {
 }
 
 CF_PLUGIN int cfanim_globalEventListener(int *type, ...) {
+    cf_log(llevDebug, "Entering cfanim_globalEventListener.");
     va_list args;
     int rv = 0;
     int event_code;
