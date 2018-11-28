@@ -797,12 +797,12 @@ static object *find_by_name(object *origin, const char *name) {
 /**
  * Create a new animation object according to file, option and activator (who)
  *
- * @param who object that raised the event leading to the plugin.
- * @param activator object that caused who to get an event.
- * @param event actual event object linking who and this plugin. Can be removed.
- * @param file file name to read from, should be accessible from the current path.
- * @param message if non empty, will be the name of the used animation instead of the one specified in the file.
- * @return 1 if the animation was created, 0 else.
+ * @param who - object that raised the event leading to the plugin.
+ * @param activator - object that caused who to get an event.
+ * @param event - actual event object linking who and this plugin. Can be removed.
+ * @param file - filename to read from, should be accessible from the current path.
+ * @param message - if non empty, will be the name of the used animation instead of the one specified in the file.
+ * @return 1 - if the animation was created, 0 else.
  * @todo fix memory leaks in case of errors.
  */
 static int start_animation(object *who, object *activator, object *event, const char *file, const char *message) {
@@ -1196,6 +1196,7 @@ CF_PLUGIN int cfanim_globalEventListener(int *type, ...) {
 }
 
 CF_PLUGIN int eventListener(int *type, ...) {
+    cf_log(llevDebug, "Entering eventListener.");
     int rv = 0;
     va_list args;
     char *buf, message[MAX_BUF], script[MAX_BUF];
