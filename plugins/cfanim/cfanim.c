@@ -385,6 +385,7 @@ static long int initnotice(const char *name, char *parameters, struct CFmovement
     move_entity->parameters = parameters ? cf_strdup_local(parameters) : NULL;
     return 1;
 }
+
 static  anim_move_result runnotice(struct CFanimation_struct *animation, long int id, void *parameters) {
     int val;
 
@@ -1180,7 +1181,7 @@ CF_PLUGIN int postInitPlugin(void) {
 }
 
 CF_PLUGIN int cfanim_globalEventListener(int *type, ...) {
-    cf_log(llevDebug, "Entering cfanim_globalEventListener.");
+    //cf_log(llevDebug, "Entering cfanim_globalEventListener.");
     va_list args;
     int rv = 0;
     int event_code;
@@ -1197,7 +1198,7 @@ CF_PLUGIN int cfanim_globalEventListener(int *type, ...) {
 }
 
 CF_PLUGIN int eventListener(int *type, ...) {
-    cf_log(llevDebug, "Entering eventListener.");
+    //cf_log(llevDebug, "Entering eventListener.");
     int rv = 0;
     va_list args;
     char *buf, message[MAX_BUF], script[MAX_BUF];
