@@ -547,6 +547,7 @@ int makes_invisible_to(object *pl, object *mon);
 int cast_invisible(object *op, object *caster, object *spell_ob);
 int cast_earth_to_dust(object *op, object *caster, object *spell_ob);
 int cast_word_of_recall(object *op, object *caster, object *spell_ob);
+int cast_word_of_penalty(object *op, object *caster, object *spell_ob);
 int cast_wonder(object *op, object *caster, int dir, object *spell_ob);
 int perceive_self(object *op);
 int cast_create_town_portal(object *op, object *caster, object *spell, int dir);

@@ -58171,6 +58171,19 @@ msg
 Word of recall transports the caster back to the most recently used Bed to Reality, but there is a delay between the time the spell is cast and the time the caster is transported home.
 endmsg
 end
+Object spell_word_of_penalty
+editor_folder spell/Misc
+anim_suffix spellcasting
+name word of penalty
+name_pl word of penalty
+face spell_word_of_recall.111
+level 99
+no_drop 1
+invisible 1
+msg
+Word of recall transports the caster back to the most recently used Bed to Reality, but there is a delay between the time the spell is cast and the time the caster is transported home.
+endmsg
+end
 Object charm_aura
 editor_folder spell/MoodChange
 name charm aura
