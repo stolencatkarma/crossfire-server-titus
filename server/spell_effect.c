@@ -985,11 +985,15 @@ int cast_word_of_penalty(object *op, object *caster, object *spell_ob) {
     sint64 loss;
     sint64 percentage_loss;  /* defined by the setting 'death_penalty_percent' */
     sint64 level_loss;   /* defined by the setting 'death_penalty_levels */
+    
+    FOR_INV_PREPARE(op, tmp)
+        if (tmp->type == SKILL && tmp->stats.exp) {
+            loss = check_exp_loss(tmp, 10);
 
-    percentage_loss = op->stats.exp/10;
-
-    op->stats.exp -= percentage_loss;
-    player_lvl_adj(op, NULL);
+            tmp->stats.exp -= loss;
+            player_lvl_adj(op, tmp);
+        }
+    FOR_INV_FINISH();
 
     EXIT_PATH(dummy) = add_string(op->contr->savebed_map);
     EXIT_X(dummy) = op->contr->bed_x;
