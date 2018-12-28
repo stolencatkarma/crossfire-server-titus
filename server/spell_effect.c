@@ -987,12 +987,8 @@ int cast_word_of_penalty(object *op, object *caster, object *spell_ob) {
     sint64 level_loss;   /* defined by the setting 'death_penalty_levels */
 
     percentage_loss = op->stats.exp/10;
-    level_loss = op->stats.exp-levels[MAX(0, 3)];
-    if (level_loss < 0)
-        level_loss = 0;
-    loss = check_exp_loss(op, MIN(level_loss, percentage_loss));
 
-    op->stats.exp -= loss;
+    op->stats.exp -= percentage_loss;
     player_lvl_adj(op, NULL);
 
     EXIT_PATH(dummy) = add_string(op->contr->savebed_map);
