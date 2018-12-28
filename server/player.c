@@ -3712,12 +3712,12 @@ static void kill_player_not_permadeath(object *op) {
         remove_unpaid_objects(op->inv, op, 1);
 
     /* Move player to the map after dying. */
-    object *tmp;
-    tmp = object_new();
-    EXIT_PATH(tmp) = add_string("death");
-    EXIT_X(tmp) = 5;
-    EXIT_Y(tmp) = 5;
-    enter_exit(op, tmp);
+    object *tmp56;
+    tmp56 = object_new();
+    EXIT_PATH(tmp56) = add_string("death");
+    EXIT_X(tmp56) = 5;
+    EXIT_Y(tmp56) = 5;
+    enter_exit(op, tmp56);
 
     /* Save the player before inserting the force to reduce chance of abuse. */
     op->contr->braced = 0;
