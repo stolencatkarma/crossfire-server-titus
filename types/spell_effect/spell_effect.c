@@ -41,6 +41,7 @@ static void move_cone(object *op);
 static void animate_bomb(object *op);
 static void move_missile(object *op);
 static void execute_word_of_recall(object *op);
+static void execute_word_of_penalty(object *op);
 static void move_ball_spell(object *op);
 static void move_swarm_spell(object *op);
 static void move_aura(object *aura);
@@ -133,6 +134,10 @@ static method_ret spell_effect_type_process(ob_methods *context, object *op) {
 
     case SP_WORD_OF_RECALL:
         execute_word_of_recall(op);
+        break;
+    
+    case SP_WORD_OF_PENALTY:
+        execute_word_of_penalty(op);
         break;
 
     case SP_MOVING_BALL:
@@ -561,6 +566,27 @@ static void move_missile(object *op) {
  * @param op The word of recall effect activating.
  */
 static void execute_word_of_recall(object *op) {
+    object *wor = op;
+
+    while (op != NULL && op->type != PLAYER)
+        op = op->env;
+
+    if (op != NULL && op->map) {
+        if ((get_map_flags(op->map, NULL, op->x, op->y, NULL, NULL)&P_NO_CLERIC) && (!QUERY_FLAG(op, FLAG_WIZCAST)))
+            draw_ext_info(NDI_UNIQUE, 0, op, MSG_TYPE_SPELL, MSG_TYPE_SPELL_FAILURE,
+                "You feel something fizzle inside you.");
+        else
+            enter_exit(op, wor);
+    }
+    object_remove(wor);
+    object_free_drop_inventory(wor);
+}
+
+/**
+ * Handles the actual word of penalty. Called when force in player inventory expires.
+ * @param op The word of recall effect activating.
+ */
+static void execute_word_of_penalty(object *op) {
     object *wor = op;
 
     while (op != NULL && op->type != PLAYER)
